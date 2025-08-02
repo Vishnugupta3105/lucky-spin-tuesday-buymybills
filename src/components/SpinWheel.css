@@ -1,0 +1,432 @@
+.spin-wheel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.wheel-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 320px;
+}
+
+.wheel-canvas {
+  border-radius: 50%;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 0 8px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+  transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+  max-width: 100%;
+  height: auto;
+  width: 100%;
+}
+
+.spin-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    0 0 0 3px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  z-index: 10;
+  border: none;
+  outline: none;
+  touch-action: manipulation;
+}
+
+.spin-button:hover {
+  box-shadow: 
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.spin-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.pointer {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 40px solid #1e3a8a;
+  z-index: 5;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  transition: all 0.3s ease;
+}
+
+.pointer::before {
+  content: '';
+  position: absolute;
+  top: -35px;
+  left: -20px;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 30px solid #60a5fa;
+  z-index: -1;
+}
+
+.pointer::after {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: -15px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 25px solid #ffffff;
+  z-index: -2;
+}
+
+.spin-instruction {
+  text-align: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.spin-instruction p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+}
+
+/* Tuesday Restriction Styles */
+.tuesday-restriction {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+.restriction-icon {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.restriction-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.restriction-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #60a5fa;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+}
+
+.restriction-info {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.restriction-info p {
+  margin-bottom: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Development Mode Styles */
+.dev-mode-toggle {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.dev-mode-toggle:hover {
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+}
+
+.dev-mode-toggle:active {
+  transform: translateY(0);
+}
+
+.dev-mode-banner {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.8);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .wheel-wrapper {
+    max-width: 280px;
+  }
+  
+  .wheel-canvas {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .spin-button {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .pointer {
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 35px solid #1e3a8a;
+    top: -18px;
+  }
+  
+  .pointer::before {
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-top: 26px solid #60a5fa;
+    top: -30px;
+    left: -16px;
+  }
+  
+  .pointer::after {
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 22px solid #ffffff;
+    top: -26px;
+    left: -12px;
+  }
+  
+  .tuesday-restriction {
+    padding: 30px 15px;
+    margin: 0 10px;
+  }
+  
+  .restriction-title {
+    font-size: 1.3rem;
+  }
+  
+  .restriction-text {
+    font-size: 1.1rem;
+  }
+  
+  .dev-mode-toggle {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+  
+  .dev-mode-banner {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .wheel-wrapper {
+    max-width: 250px;
+  }
+  
+  .wheel-canvas {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .spin-button {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .pointer {
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-top: 30px solid #1e3a8a;
+    top: -15px;
+  }
+  
+  .pointer::before {
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 24px solid #60a5fa;
+    top: -26px;
+    left: -14px;
+  }
+  
+  .pointer::after {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 20px solid #ffffff;
+    top: -22px;
+    left: -10px;
+  }
+  
+  .restriction-title {
+    font-size: 1.2rem;
+  }
+  
+  .restriction-text {
+    font-size: 1rem;
+  }
+  
+  .dev-mode-toggle {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+  
+  .dev-mode-banner {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+} 
+
+@media (max-width: 320px) {
+  .wheel-wrapper {
+    max-width: 220px;
+  }
+  
+  .wheel-canvas {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .spin-button {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .pointer {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 25px solid #1e3a8a;
+    top: -12px;
+  }
+  
+  .pointer::before {
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 20px solid #60a5fa;
+    top: -22px;
+    left: -12px;
+  }
+  
+  .pointer::after {
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 18px solid #ffffff;
+    top: -18px;
+    left: -8px;
+  }
+  
+  .tuesday-restriction {
+    padding: 20px 10px;
+    margin: 0 5px;
+  }
+  
+  .restriction-title {
+    font-size: 1.1rem;
+  }
+  
+  .restriction-text {
+    font-size: 0.9rem;
+  }
+  
+  .restriction-info {
+    font-size: 0.75rem;
+  }
+}
+
+/* Landscape orientation for mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .wheel-wrapper {
+    max-width: 200px;
+  }
+  
+  .wheel-canvas {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .spin-button {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .pointer {
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 20px solid #1e3a8a;
+    top: -10px;
+  }
+  
+  .tuesday-restriction {
+    padding: 20px 15px;
+  }
+  
+  .restriction-title {
+    font-size: 1.2rem;
+  }
+  
+  .restriction-text {
+    font-size: 1rem;
+  }
+} 
