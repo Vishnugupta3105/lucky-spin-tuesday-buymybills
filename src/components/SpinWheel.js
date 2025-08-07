@@ -7,8 +7,8 @@ const SpinWheel = ({ onSpinResult, isSpinning, setIsSpinning }) => {
   const canvasRef = useRef(null);
   const [currentRotation, setCurrentRotation] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isTuesday, setIsTuesday] = useState(false);
-  const [timeUntilTuesday, setTimeUntilTuesday] = useState('');
+  const [isThursday, setIsThursday] = useState(false);
+  const [timeUntilThursday, setTimeUntilThursday] = useState('');
   const [hasSpunToday, setHasSpunToday] = useState(false);
 
   const segments = [
@@ -21,20 +21,20 @@ const SpinWheel = ({ onSpinResult, isSpinning, setIsSpinning }) => {
   ];
 
   useEffect(() => {
-    checkIfTuesday();
+    checkIfThursday();
     checkIfAlreadySpun();
-    const timer = setInterval(checkIfTuesday, 60000); // Check every minute
+    const timer = setInterval(checkIfThursday, 60000); // Check every minute
     return () => clearInterval(timer);
   }, []);
 
-  const checkIfTuesday = () => {
+  const checkIfThursday = () => {
     const now = new Date();
-    const dayOfWeek = now.getDay(); // 0 = Sunday, 2 = Tuesday
-    const isTodayTuesday = dayOfWeek === 2;
-    setIsTuesday(isTodayTuesday);
+    const dayOfWeek = now.getDay(); // 0 = Sunday, 4 = Thursday
+    const isTodayThursday = dayOfWeek === 4;
+    setIsThursday(isTodayThursday);
 
-    if (!isTodayTuesday) {
-      calculateTimeUntilTuesday();
+    if (!isTodayThursday) {
+      calculateTimeUntilThursday();
     }
   };
 
@@ -45,25 +45,54 @@ const SpinWheel = ({ onSpinResult, isSpinning, setIsSpinning }) => {
     setHasSpunToday(hasSpun);
   };
 
-  const calculateTimeUntilTuesday = () => {
+  const calculateTimeUntilThursday = () => {
     const now = new Date();
-    const daysUntilTuesday = (2 - now.getDay() + 7) % 7;
+    const daysUntilThursday = (4 - now.getDay() + 7) % 7;
     
-    if (daysUntilTuesday === 0) {
-      // It's Tuesday, but check if it's past midnight
+    if (daysUntilThursday === 0) {
+      // It's Thursday, but check if it's past midnight
       const hoursUntilMidnight = 24 - now.getHours();
       if (hoursUntilMidnight > 0) {
-        setTimeUntilTuesday(`${hoursUntilMidnight} hours left`);
+        setTimeUntilThursday(`${hoursUntilMidnight} hours left`);
       } else {
-        setTimeUntilTuesday('Today is Tuesday!');
+        setTimeUntilThursday('Today is Thursday!');
       }
     } else {
-      setTimeUntilTuesday(`${daysUntilTuesday} days left`);
+      setTimeUntilThursday(`${daysUntilThursday} days left`);
     }
   };
 
   useEffect(() => {
-    drawWheel();
+    // Ensure canvas is properly sized and drawn
+    const canvas = canvasRef.current;
+    if (canvas) {
+      // Set canvas size to match CSS size
+      canvas.width = 320;
+      canvas.height = 320;
+      drawWheel();
+    } else {
+      // Retry after a short delay
+      setTimeout(() => {
+        const retryCanvas = canvasRef.current;
+        if (retryCanvas) {
+          retryCanvas.width = 320;
+          retryCanvas.height = 320;
+          drawWheel();
+        }
+      }, 100);
+    }
+  }, []);
+
+  // Additional useEffect to ensure wheel is drawn when component is ready
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const canvas = canvasRef.current;
+      if (canvas && canvas.width > 0) {
+        drawWheel();
+      }
+    }, 500);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   const drawWheel = () => {
@@ -71,10 +100,13 @@ const SpinWheel = ({ onSpinResult, isSpinning, setIsSpinning }) => {
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const radius = Math.min(centerX, centerY) - 30;
 
+    // Clear the canvas completely
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const segmentAngle = (2 * Math.PI) / segments.length;
@@ -129,7 +161,7 @@ const SpinWheel = ({ onSpinResult, isSpinning, setIsSpinning }) => {
   };
 
   const spinWheel = async () => {
-    if (isSpinning || isAnimating || !isTuesday || hasSpunToday) return;
+    if (isSpinning || isAnimating || !isThursday || hasSpunToday) return;
 
     setIsSpinning(true);
     setIsAnimating(true);
@@ -212,10 +244,10 @@ const SpinWheel = ({ onSpinResult, isSpinning, setIsSpinning }) => {
     requestAnimationFrame(animate);
   };
 
-  if (!isTuesday) {
+  if (!isThursday) {
     return (
       <div className="spin-wheel-container">
-        <div className="tuesday-restriction">
+        <div className="thursday-restriction">
           <motion.div
             className="restriction-icon"
             animate={{ rotate: 360 }}
@@ -223,11 +255,11 @@ const SpinWheel = ({ onSpinResult, isSpinning, setIsSpinning }) => {
           >
             <Clock size={48} color="#1e3a8a" />
           </motion.div>
-          <h3 className="restriction-title">Spin Only on Tuesday!</h3>
-          <p className="restriction-text">{timeUntilTuesday}</p>
+          <h3 className="restriction-title">Spin Only on Thursday!</h3>
+          <p className="restriction-text">{timeUntilThursday}</p>
           <div className="restriction-info">
-            <p>🎯 Come back on Tuesday to spin and win rewards!</p>
-            <p>⏰ One spin per Tuesday only</p>
+            <p>🎯 Come back on Thursday to spin and win rewards!</p>
+            <p>⏰ One spin per Thursday only</p>
           </div>
         </div>
       </div>
@@ -237,7 +269,7 @@ const SpinWheel = ({ onSpinResult, isSpinning, setIsSpinning }) => {
   if (hasSpunToday) {
     return (
       <div className="spin-wheel-container">
-        <div className="tuesday-restriction">
+        <div className="thursday-restriction">
           <motion.div
             className="restriction-icon"
             animate={{ scale: [1, 1.1, 1] }}
@@ -246,11 +278,11 @@ const SpinWheel = ({ onSpinResult, isSpinning, setIsSpinning }) => {
             <Lock size={48} color="#1e3a8a" />
           </motion.div>
           <h3 className="restriction-title">Already Spun Today!</h3>
-          <p className="restriction-text">Come back next Tuesday!</p>
+          <p className="restriction-text">Come back next Thursday!</p>
           <div className="restriction-info">
-            <p>🎯 You've already used your Tuesday spin!</p>
-            <p>⏰ One spin per Tuesday only</p>
-            <p>📅 Next spin available: Next Tuesday</p>
+            <p>🎯 You've already used your Thursday spin!</p>
+            <p>⏰ One spin per Thursday only</p>
+            <p>📅 Next spin available: Next Thursday</p>
           </div>
         </div>
       </div>

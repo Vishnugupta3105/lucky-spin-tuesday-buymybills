@@ -25,7 +25,7 @@ function App() {
     return days[new Date().getDay()];
   };
 
-  const isTuesday = new Date().getDay() === 2;
+  const isThursday = new Date().getDay() === 4;
 
   return (
     <div className="app">
@@ -85,7 +85,7 @@ function App() {
             >
               <Sparkles size={24} color="#60a5fa" />
             </motion.div>
-            <h1 className="title">Lucky Spin Tuesday</h1>
+            <h1 className="title">Lucky Spin Thursday</h1>
             <motion.div
               className="sparkle-icon"
               animate={{ rotate: [0, -360] }}
@@ -104,9 +104,9 @@ function App() {
           >
             <Calendar size={16} color="#60a5fa" />
             <span>Today is {getCurrentDay()}</span>
-            {isTuesday && (
+            {isThursday && (
               <motion.span
-                className="tuesday-badge"
+                className="thursday-badge"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.5, type: "spring" }}
@@ -126,9 +126,9 @@ function App() {
           <div className="spin-text-container">
             <Gift className="gift-icon" size={20} />
             <p className="spin-text">
-              {isTuesday 
+              {isThursday 
                 ? "Spin me and get your BMB reward!" 
-                : "Spin available only on Tuesday!"
+                : "Spin available only on Thursday!"
               }
             </p>
             <Star className="star-icon" size={20} />
@@ -148,7 +148,7 @@ function App() {
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <p className="footer-text">
-            {isTuesday ? "🎉 Try your luck today! 🎉" : "⏰ Come back on Tuesday!"}
+            {isThursday ? "🎉 Try your luck today! 🎉" : "⏰ Come back on Thursday!"}
           </p>
         </motion.div>
       </div>
